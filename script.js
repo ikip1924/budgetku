@@ -29,8 +29,12 @@ addBudgetBtn.addEventListener("click", () => {
 })
 
 closeModalBudgetBtn.addEventListener("click", () => {
-	budgetForm.classList.add("hidden")
+	closeModalBudget();
 })
+
+function closeModalBudget() {
+	budgetForm.classList.add("hidden")
+}
 
 addSpentBtn.addEventListener("click", () => {
 	spentForm.classList.remove("hidden")
@@ -39,3 +43,45 @@ addSpentBtn.addEventListener("click", () => {
 closeModalSpentBtn.addEventListener("click", () => {
 	spentForm.classList.add("hidden")
 })
+
+
+function getFormValue(formData) {
+	let result = new Object();
+
+	for (const data of formData.entries()) {
+		const [key, value] = data;
+
+		Object.assign(result, {
+			[key]: value
+		})
+	}
+	return result;
+}
+
+function getExistingData() {
+	return JSON.parse(localStorage.getItem("budgets")) ?? [];
+}
+
+function saveDataBudget(newData) {
+	const existingData = getExistingData();
+	existingData.push(newData)
+	localStorage.setItem("budgets", JSON.stringify(existingData))
+}
+
+//submit form budget
+document.querySelector("#budget_form form").addEventListener("submit", (e) => {
+	e.preventDefault()
+
+	const data = getFormValue(new FormData(e.target))
+
+	saveDataBudget(data)
+	closeModalBudget()
+	resetInput()
+
+})
+
+function resetInput() {
+	document.querySelectorAll("form input").forEach((input) => {
+		input.value = ""
+	})
+}
