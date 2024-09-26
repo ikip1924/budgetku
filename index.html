@@ -14,7 +14,9 @@
 	<title>Budgetku - App</title>
 </head>
 <body>
-	<div class="notification">✅ Budget berhasil tambah</div>
+	<div id="notification" class="notification__wrapper">
+
+	</div>
 	<header class="container">
 		<img src="/img/bag.png" alt="icon-kantong-uang">
 		<h1>Budgetku.</h1>
@@ -36,14 +38,12 @@
 		<button class="back__home"><i class="ph ph-caret-left icon__back"></i>
 			Halaman Utama</button>
 		<div class="budget__card">
-			<div class="">
 				<h2 class="budget__name">Makan & Minum</h2>
 			<p class="budget__amount">Rp 968.000</p>
 			<p class="budget__total ">Total Rp 1.000.000</p>
 			</div>
 			<div class="icon">
 				<i class="ph ph-pencil-line"></i>
-			</div>
 		</div>
 		<button class="add__spent__btn"> <span>+</span> Tambah Pengeluaran </button>
 		<div class="sort__spent">
@@ -104,11 +104,11 @@
 			</div>
 			<form action="">
 				<label for="">Nama Budget</label>
-				<input name="nama_budget" type="text">
+				<input required name="nama_budget" type="text">
 				<label for="">jumlah budget</label>
 				<div class="input__money">
 					<span>Rp</span>
-					<input name="total" type="number">
+					<input required name="total" type="number">
 				</div>
 				<button>Simpan</button>
 			</form>

@@ -325,15 +325,56 @@ font-weight: bold;
 	-ms-border-radius: 10px;
 	-o-border-radius: 10px;
 }
-
+.notification__wrapper {
+	position: fixed;
+	top: 0;
+	z-index: 20;
+}
 .notification {
 	margin: 0 auto;
 	width: fit-content;
 	border-radius: 12px;
-	background-color: white;
+	background-color: rgba(255,255,255, 0.671);
+	backdrop-filter: blur(10px);
 	border: 1px solid var(--color-text-secondary);
 	padding: .75rem 1rem;
+	animation: slidedown 1s ease-in-out;
+	-webkit-animation: slidedown .5s ease-in-out;
 }
+.notification.out{
+	animation: fadeout .5s ease-in-out forwards;
+	-webkit-animation: fadeout .5s ease-in-out forwards;
+}
+
+@keyframes fadeout {
+	from{
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slidedown {
+	from{
+		opacity: 0;
+		transform: translateY(-1rem);
+		-webkit-transform: translateY(-1rem);
+		-moz-transform: translateY(-1rem);
+		-ms-transform: translateY(-1rem);
+		-o-transform: translateY(-1rem);
+}
+to{
+	opacity: 1;
+	transform: translateY(0);
+	-webkit-transform: translateY(0);
+	-moz-transform: translateY(0);
+	-ms-transform: translateY(0);
+	-o-transform: translateY(0);
+}
+}
+
+
 /* budget responsive */
 @media (max-width: 768px) {
 	.budgets{
