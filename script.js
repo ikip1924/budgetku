@@ -1,14 +1,50 @@
 const backHomeBtn = document.querySelector("#budget_details button.back__home");
 const budgetsPage = document.getElementById("budgets");
+renderBudgets()
 const budgetDetailPage = document.getElementById("budget_details");
-const budgetCards = document.querySelectorAll("#budgets .budget__card");
-const addBudgetBtn = document.querySelector("#budgets button");
 const budgetForm = document.getElementById("budget_form")
 const closeModalBudgetBtn = document.querySelector("#budget_form i")
 const addSpentBtn = document.querySelector(".add__spent__btn")
 const spentForm = document.getElementById("spent_form")
 const closeModalSpentBtn = document.querySelector("#spent_form i")
-const notifications = document.getElementById("notification")
+const notifications = document.getElementById("notifications")
+
+function selectBudgetCardsAndButton() {
+	const budgetCards = document.querySelectorAll("#budgets .budget__card");
+	const addBudgetBtn = document.querySelector("#budgets button");
+
+	// event listener klik budget card
+	budgetCards.forEach((budgetCard) => {
+		budgetCard.addEventListener("click", () => {
+			budgetsPage.classList.add("hidden");
+			budgetDetailPage.classList.remove("hidden");
+		})
+	})
+
+	// event listener klik tambah budget 
+	addBudgetBtn.addEventListener("click", () => {
+		budgetForm.classList.remove("hidden")
+	})
+}
+
+function renderBudgets() {
+	const budgetData = getExistingData()
+
+	console.log(budgetData)
+
+	const budgetList = budgetData.map((budget) => {
+		return `<div class="budget__card">
+			<h2 class="budget__name">${budget.nama_budget}</h2>
+			<p class="budget__amount">${budget.total}</p>
+			<p class="budget__total ">${budget.total}</p>
+		</div>`
+	})
+		.concat([`<button class="add__budget__btn">+</button>`])
+		.join("");
+
+	budgetsPage.innerHTML = budgetList
+	selectBudgetCardsAndButton()
+}
 
 // Klik Halaman Utama
 backHomeBtn.addEventListener("click", () => {
@@ -16,18 +52,6 @@ backHomeBtn.addEventListener("click", () => {
 	budgetsPage.classList.remove("hidden");
 })
 
-// klik budget cards
-budgetCards.forEach((budgetCard) => {
-	budgetCard.addEventListener("click", () => {
-		budgetsPage.classList.add("hidden");
-		budgetDetailPage.classList.remove("hidden");
-	})
-})
-
-// klik tambah budget
-addBudgetBtn.addEventListener("click", () => {
-	budgetForm.classList.remove("hidden")
-})
 
 closeModalBudgetBtn.addEventListener("click", () => {
 	closeModalBudget();
@@ -79,7 +103,7 @@ document.querySelector("#budget_form form").addEventListener("submit", (e) => {
 	closeModalBudget()
 	resetInput()
 	showNotification(`✅ Budget ${data.nama_budget} Berhasil Disimpan`)
-
+	renderBudgets()
 })
 
 function resetInput() {
