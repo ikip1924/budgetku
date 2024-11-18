@@ -14,8 +14,11 @@ function selectBudgetCardsAndButton() {
 	const addBudgetBtn = document.querySelector("#budgets button");
 
 	// event listener klik budget card
-	budgetCards.forEach((budgetCard) => {
-		budgetCard.addEventListener("click", () => {
+	budgetCards.forEach((card) => {
+		card.addEventListener("click", () => {
+			const budgetId = card.getAttribute("data-budgetid")
+
+			renderBudgetingDetail(budgetId)
 			budgetsPage.classList.add("hidden");
 			budgetDetailPage.classList.remove("hidden");
 		})
@@ -27,15 +30,15 @@ function selectBudgetCardsAndButton() {
 	})
 }
 
+// me render data budgeting 
 function renderBudgets() {
 	const budgetData = getExistingData()
 
-	console.log(budgetData)
 
 	const budgetList = budgetData.map((budget) => {
-		return `<div class="budget__card">
+		return `<div class="budget__card" data-budgetId="${budget.id}">
 			<h2 class="budget__name">${budget.nama_budget}</h2>
-			<p class="budget__amount">${budget.total}</p>
+			<p class="budget__amount">Rp ${budget.total}</p>
 			<p class="budget__total ">${budget.total}</p>
 		</div>`
 	})
@@ -44,6 +47,19 @@ function renderBudgets() {
 
 	budgetsPage.innerHTML = budgetList
 	selectBudgetCardsAndButton()
+}
+
+function renderBudgetingDetail(budgetId) {
+
+	const budgets = getExistingData()
+
+	const currentBudget = budgets.filter((budget) => budget.id == budgetId)[0]
+
+
+	document.querySelector("#budget_details .budget__card h2").innerText = currentBudget.nama_budget
+	document.querySelector("#budget_details .budget__card .budget__amount").innerText = "Rp " + currentBudget.total;
+	document.querySelector("#budget_details .budget__card .budget__total").innerText = "Rp " + currentBudget.total;
+
 }
 
 // Klik Halaman Utama
@@ -99,12 +115,20 @@ document.querySelector("#budget_form form").addEventListener("submit", (e) => {
 
 	const data = getFormValue(new FormData(e.target))
 
-	saveDataBudget(data)
+	const dataWithId = {
+		id: generateId(),
+		...data,
+	}
+	saveDataBudget(dataWithId)
 	closeModalBudget()
 	resetInput()
 	showNotification(`✅ Budget ${data.nama_budget} Berhasil Disimpan`)
 	renderBudgets()
 })
+
+function generateId() {
+	return new Date().getTime();
+}
 
 function resetInput() {
 	document.querySelectorAll("form input").forEach((input) => {
