@@ -8,6 +8,7 @@ const addSpentBtn = document.querySelector(".add__spent__btn")
 const spentForm = document.getElementById("spent_form")
 const closeModalSpentBtn = document.querySelector("#spent_form i")
 const notifications = document.getElementById("notifications")
+// const listSpent = document.querySelector("#budget_details .spent")
 
 function selectBudgetCardsAndButton() {
 	const budgetCards = document.querySelectorAll("#budgets .budget__card");
@@ -19,6 +20,7 @@ function selectBudgetCardsAndButton() {
 			const budgetId = card.getAttribute("data-budgetid")
 
 			renderBudgetingDetail(budgetId)
+			renderPengeluaran(budgetId)
 			budgetsPage.classList.add("hidden");
 			budgetDetailPage.classList.remove("hidden");
 		})
@@ -47,6 +49,24 @@ function renderBudgets() {
 
 	budgetsPage.innerHTML = budgetList
 	selectBudgetCardsAndButton()
+}
+
+function renderPengeluaran(budgetId) {
+	const { pengeluaran } = getBudgetById(budgetId)
+
+
+	const listPengeluaran = pengeluaran.map((item) => {
+		return `<div class="spent__item">
+				<div class="spent__item__description">
+					<h4>${item.nama_pengeluaran}</h4>
+					<p>${item.tanggal}</p>
+				</div>
+				<div class="spent__item__price">
+					<p>Rp. ${item.jumlah} </p>
+				</div>
+		</div>`
+	}).join("")
+	document.querySelector("#budget_details .spent").innerHTML = listPengeluaran
 }
 
 function renderBudgetingDetail(budgetId) {
@@ -140,12 +160,14 @@ document.querySelector("#budget_form form").addEventListener("submit", (e) => {
 document.querySelector("#spent_form form").addEventListener("submit", (e) => {
 	e.preventDefault()
 
+	budgetId = document.querySelector("#budget_details .budget__card").getAttribute("data-budgetid")
 	const data = getFormValue(new FormData(e.target))
 
 	addPengeluaran(data)
 	closeModalPengeluaran()
 	resetInput()
 	showNotification(`✅ Pengeluaran ${data.nama_pengeluaran} Berhasil Tambahkan`)
+	renderPengeluaran(budgetId)
 })
 
 function addPengeluaran(data) {
