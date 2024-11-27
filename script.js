@@ -36,11 +36,12 @@ function selectBudgetCardsAndButton() {
 function renderBudgets() {
 	const budgetData = getExistingData()
 
-
 	const budgetList = budgetData.map((budget) => {
+		const sisaBudget = hitungSisaBudget(budget)
+
 		return `<div class="budget__card" data-budgetId="${budget.id}">
 			<h2 class="budget__name">${budget.nama_budget}</h2>
-			<p class="budget__amount">Rp ${budget.total}</p>
+			<p class="budget__amount">Rp ${sisaBudget}</p>
 			<p class="budget__total ">${budget.total}</p>
 		</div>`
 	})
@@ -72,13 +73,14 @@ function renderPengeluaran(budgetId) {
 function renderBudgetingDetail(budgetId) {
 
 	const currentBudget = getBudgetById(budgetId)
+	const sisaBudget = hitungSisaBudget(currentBudget)
 
 	document
 		.querySelector("#budget_details .budget__card")
 		.setAttribute("data-budgetid", budgetId)
 
 	document.querySelector("#budget_details .budget__card h2").innerText = currentBudget.nama_budget
-	document.querySelector("#budget_details .budget__card .budget__amount").innerText = "Rp " + currentBudget.total;
+	document.querySelector("#budget_details .budget__card .budget__amount").innerText = "Rp " + sisaBudget;
 	document.querySelector("#budget_details .budget__card .budget__total").innerText = "Rp " + currentBudget.total;
 
 }
@@ -217,4 +219,12 @@ function showNotification(message) {
 			notifications.removeChild(newNotification)
 		}, 500)
 	}, 4000);
+}
+
+function hitungSisaBudget(dataBudget) {
+	const totalPengeluaran = dataBudget.pengeluaran
+		?.map((item) => +item.jumlah)
+		.reduce((jumlah, total) => jumlah + total)
+
+	return +dataBudget.total - totalPengeluaran
 }
