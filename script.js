@@ -38,11 +38,12 @@ function renderBudgets() {
 
 	const budgetList = budgetData.map((budget) => {
 		const sisaBudget = hitungSisaBudget(budget)
-
+		console.log("format: ", formatRupiah(sisaBudget)
+		)
 		return `<div class="budget__card" data-budgetId="${budget.id}">
 			<h2 class="budget__name">${budget.nama_budget}</h2>
-			<p class="budget__amount">Rp ${sisaBudget}</p>
-			<p class="budget__total ">${budget.total}</p>
+			<p class="budget__amount"> ${formatRupiah(sisaBudget)}</p>
+			<p class="budget__total ">${formatRupiah(budget.total)}</p>
 		</div>`
 	})
 		.concat([`<button class="add__budget__btn">+</button>`])
@@ -63,7 +64,7 @@ function renderPengeluaran(budgetId) {
 					<p>${item.tanggal}</p>
 				</div>
 				<div class="spent__item__price">
-					<p>Rp. ${item.jumlah} </p>
+					<p>${formatRupiah(item.jumlah)} </p>
 				</div>
 		</div>`
 	}).join("")
@@ -80,8 +81,8 @@ function renderBudgetingDetail(budgetId) {
 		.setAttribute("data-budgetid", budgetId)
 
 	document.querySelector("#budget_details .budget__card h2").innerText = currentBudget.nama_budget
-	document.querySelector("#budget_details .budget__card .budget__amount").innerText = "Rp " + sisaBudget;
-	document.querySelector("#budget_details .budget__card .budget__total").innerText = "Rp " + currentBudget.total;
+	document.querySelector("#budget_details .budget__card .budget__amount").innerText = formatRupiah(sisaBudget)
+	document.querySelector("#budget_details .budget__card .budget__total").innerText = formatRupiah(currentBudget.total)
 
 }
 
@@ -227,4 +228,12 @@ function hitungSisaBudget(dataBudget) {
 		.reduce((jumlah, total) => jumlah + total)
 
 	return +dataBudget.total - totalPengeluaran
+}
+
+function formatRupiah(angka) {
+	return new Intl.NumberFormat("id-ID", {
+		style: "currency",
+		currency: "IDR",
+		maximumFractionDigits: 0
+	}).format(angka)
 }
